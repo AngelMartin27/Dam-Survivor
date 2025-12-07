@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d1fd6ca7496fe243b13d063c0653cab, type: 3}
+  m_Name: Mejora Frozen Zone
+  m_EditorClassIdentifier: Assembly-CSharp::DataMejora
+  titulo: Frost zone
+  descripcion: Obtienes o mejoras el Frost zone
+  icono: {fileID: 21300000, guid: 46d26c390d6c4924eba23e820c40a8fe, type: 3}
+  prefabArma: {fileID: 940576479078892718, guid: 2bb4d54339c543749aa432c92cb08405, type: 3}

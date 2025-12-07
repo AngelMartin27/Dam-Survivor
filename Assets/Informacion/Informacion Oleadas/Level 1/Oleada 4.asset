@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4040b34395234742a157e58d5ac2155, type: 3}
+  m_Name: Oleada 4
+  m_EditorClassIdentifier: Assembly-CSharp::DataOleada
+  gruposDeEnemigos:
+  - nombre: Zanganos
+    enemigoPrefab: {fileID: 511586811414050097, guid: f4e00e992e335c945baacc6ef7999881, type: 3}
+    cantidadTotal: 60
+    tiempoEntreSpawns: 3
+  - nombre: Corredores
+    enemigoPrefab: {fileID: 3672832984794887285, guid: da56ada32fd29674783acb6f87657107, type: 3}
+    cantidadTotal: 12
+    tiempoEntreSpawns: 5
+  tiempoAlTerminar: 5

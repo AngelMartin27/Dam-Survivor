@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d1fd6ca7496fe243b13d063c0653cab, type: 3}
+  m_Name: Mejora Tajo Fantasma
+  m_EditorClassIdentifier: Assembly-CSharp::DataMejora
+  titulo: Tajo Fantasma
+  descripcion: Obtienes o mejoras Tajo Fantasma
+  icono: {fileID: 21300000, guid: 1422d28c2560a9c4896183baa6ba9037, type: 3}
+  prefabArma: {fileID: 4265858885335440560, guid: 99363d138e3bcca4388ee7e7f72ba98d, type: 3}

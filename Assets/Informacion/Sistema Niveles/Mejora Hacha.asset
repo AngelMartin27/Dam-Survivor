@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d1fd6ca7496fe243b13d063c0653cab, type: 3}
+  m_Name: Mejora Hacha
+  m_EditorClassIdentifier: Assembly-CSharp::DataMejora
+  titulo: Hacha
+  descripcion: Mejora el Hacha
+  icono: {fileID: 21300000, guid: 16bffec259a802e4985c7821ed6c35c6, type: 3}
+  prefabArma: {fileID: 3556273983600412762, guid: 6af7c2b2782749246895e6de1bd7ff8a, type: 3}
