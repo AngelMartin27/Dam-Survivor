@@ -15,4 +15,4 @@ MonoBehaviour:
   titulo: Hacha
   descripcion: Mejora el Hacha
   icono: {fileID: 21300000, guid: 16bffec259a802e4985c7821ed6c35c6, type: 3}
-  prefabArma: {fileID: 3556273983600412762, guid: 6af7c2b2782749246895e6de1bd7ff8a, type: 3}
+  prefabArma: {fileID: 1974109954405935646, guid: 6af7c2b2782749246895e6de1bd7ff8a, type: 3}

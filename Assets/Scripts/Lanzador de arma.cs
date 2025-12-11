@@ -99,14 +99,6 @@ public class Lanzadordearma : ArmaBase
                 scriptHacha.ConfigurarArma(danoActual);
                 return; // Ya terminamos
             }
-            // Configurar el arma según su tipo (tajo)
-            SlashAtaque scriptTajo = nuevaArma.GetComponent<SlashAtaque>();
-            if (scriptTajo != null)
-            {
-                // El tajo solo pide (Daño)
-                scriptTajo.ConfigurarArma(danoActual);
-                return; // Ya terminamos
-            }
             Debug.LogError("No se ha configurado el arma: " + armaPrefab.name);
         }
 }

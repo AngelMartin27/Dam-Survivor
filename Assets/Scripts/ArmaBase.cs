@@ -6,7 +6,7 @@ public class ArmaBase : MonoBehaviour
     public string nombreArma;
 
     // 'protected' permite que AreaRecogida y ArmaDeZona lo usen directamenente.
-    protected int nivelActual = 1;
+    public int nivelActual = 1;
 
     // Propiedad pública por si la UI necesita leer el nivel (solo lectura)
     public int NivelActual => nivelActual;

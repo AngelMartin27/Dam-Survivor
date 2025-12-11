@@ -198,6 +198,54 @@ public partial class @Controles: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Debug"",
+            ""id"": ""1e94635e-32dc-488d-a726-8286a7a2cd4d"",
+            ""actions"": [
+                {
+                    ""name"": ""AnadirArma"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9dd36a5-a30d-4fe8-b368-6a148fe88ebf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SubirNivel"",
+                    ""type"": ""Button"",
+                    ""id"": ""b55c4238-3563-40d3-8590-95c256cd5edc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8ff4e389-5161-474d-b0ee-6ae6b88ae610"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SubirNivel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""01264b02-c269-41cc-bca5-538cbd8c3774"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AnadirArma"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -208,12 +256,17 @@ public partial class @Controles: IInputActionCollection2, IDisposable
         // Camara
         m_Camara = asset.FindActionMap("Camara", throwIfNotFound: true);
         m_Camara_Zoom = m_Camara.FindAction("Zoom", throwIfNotFound: true);
+        // Debug
+        m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
+        m_Debug_AnadirArma = m_Debug.FindAction("AnadirArma", throwIfNotFound: true);
+        m_Debug_SubirNivel = m_Debug.FindAction("SubirNivel", throwIfNotFound: true);
     }
 
     ~@Controles()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, Controles.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Camara.enabled, "This will cause a leak and performance issues, Controles.Camara.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Debug.enabled, "This will cause a leak and performance issues, Controles.Debug.Disable() has not been called.");
     }
 
     /// <summary>
@@ -477,6 +530,113 @@ public partial class @Controles: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="CamaraActions" /> instance referencing this action map.
     /// </summary>
     public CamaraActions @Camara => new CamaraActions(this);
+
+    // Debug
+    private readonly InputActionMap m_Debug;
+    private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
+    private readonly InputAction m_Debug_AnadirArma;
+    private readonly InputAction m_Debug_SubirNivel;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Debug".
+    /// </summary>
+    public struct DebugActions
+    {
+        private @Controles m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public DebugActions(@Controles wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Debug/AnadirArma".
+        /// </summary>
+        public InputAction @AnadirArma => m_Wrapper.m_Debug_AnadirArma;
+        /// <summary>
+        /// Provides access to the underlying input action "Debug/SubirNivel".
+        /// </summary>
+        public InputAction @SubirNivel => m_Wrapper.m_Debug_SubirNivel;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Debug; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="DebugActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(DebugActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="DebugActions" />
+        public void AddCallbacks(IDebugActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DebugActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DebugActionsCallbackInterfaces.Add(instance);
+            @AnadirArma.started += instance.OnAnadirArma;
+            @AnadirArma.performed += instance.OnAnadirArma;
+            @AnadirArma.canceled += instance.OnAnadirArma;
+            @SubirNivel.started += instance.OnSubirNivel;
+            @SubirNivel.performed += instance.OnSubirNivel;
+            @SubirNivel.canceled += instance.OnSubirNivel;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="DebugActions" />
+        private void UnregisterCallbacks(IDebugActions instance)
+        {
+            @AnadirArma.started -= instance.OnAnadirArma;
+            @AnadirArma.performed -= instance.OnAnadirArma;
+            @AnadirArma.canceled -= instance.OnAnadirArma;
+            @SubirNivel.started -= instance.OnSubirNivel;
+            @SubirNivel.performed -= instance.OnSubirNivel;
+            @SubirNivel.canceled -= instance.OnSubirNivel;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DebugActions.UnregisterCallbacks(IDebugActions)" />.
+        /// </summary>
+        /// <seealso cref="DebugActions.UnregisterCallbacks(IDebugActions)" />
+        public void RemoveCallbacks(IDebugActions instance)
+        {
+            if (m_Wrapper.m_DebugActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="DebugActions.AddCallbacks(IDebugActions)" />
+        /// <seealso cref="DebugActions.RemoveCallbacks(IDebugActions)" />
+        /// <seealso cref="DebugActions.UnregisterCallbacks(IDebugActions)" />
+        public void SetCallbacks(IDebugActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DebugActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DebugActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="DebugActions" /> instance referencing this action map.
+    /// </summary>
+    public DebugActions @Debug => new DebugActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
     /// </summary>
@@ -506,5 +666,27 @@ public partial class @Controles: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnZoom(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="DebugActions.AddCallbacks(IDebugActions)" />
+    /// <seealso cref="DebugActions.RemoveCallbacks(IDebugActions)" />
+    public interface IDebugActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "AnadirArma" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAnadirArma(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SubirNivel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSubirNivel(InputAction.CallbackContext context);
     }
 }

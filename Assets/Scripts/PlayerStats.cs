@@ -2,28 +2,41 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI; 
 using TMPro; 
+using Random = UnityEngine.Random; 
 
 public class PlayerStats : MonoBehaviour
 {
+    // --- TUS VARIABLES ORIGINALES ---
+    
     [Header("UI - Barras y Textos")]
     public Slider barraDeVida; 
-    public Slider barraDeXP;      
-    public TMP_Text textoNivel;    
+    public Slider barraDeXP; 
+    public TMP_Text textoNivel; 
 
     [Header("Estado del Jugador")]
-    public int currentHealth;       
-    public int maxHealth = 100;     
-    public bool estaVivo = true;    
+    public int currentHealth; 
+    public int maxHealth = 100; 
+    public bool estaVivo = true; 
 
     [Header("Sistema de Niveles")]
-    public int nivel = 1;       
-    public int experiencia = 0;     
+    public int nivel = 1; 
+    public int experiencia = 0; 
     public int experienciaParaSubir = 100; 
-    public int incrementoPorNivel = 50;    
+    public int incrementoPorNivel = 50; 
 
     [Header("Inventario")]
-    // Esta lista es vital para saber qué armas tienes ya
     public List<ArmaBase> armasEquipadas = new List<ArmaBase>(); 
+    
+    // --- VARIABLES DE DEBUG (Mantenemos solo la lista de armas) ---
+
+    [Header("DEBUG - Armas Disponibles")]
+    // Lista de Prefabs de armas para el debug (Tecla 1)
+    [SerializeField] private List<GameObject> armasDisponiblesDEBUG; 
+
+    // Referencias internas de DEBUG
+    private int armaIndexDEBUG = 0;
+
+    // --- MÉTODOS DE INICIALIZACIÓN ---
 
     private void Awake() 
     {
@@ -42,7 +55,6 @@ public class PlayerStats : MonoBehaviour
         ActualizarUI_Experiencia();
 
         // 2. AUTO-DETECTAR ARMAS INICIALES
-        // Busca las armas que se le pusieron al Player como hijos en la escena
         ArmaBase[] armasEncontradas = GetComponentsInChildren<ArmaBase>();
         
         armasEquipadas.Clear(); 
@@ -52,6 +64,51 @@ public class PlayerStats : MonoBehaviour
         if (experienciaParaSubir <= 0) experienciaParaSubir = 100;
         if (incrementoPorNivel <= 0) incrementoPorNivel = 50;
     }
+
+    // --- LÓGICA DE DEBUG (LLAMADA POR DebugLevel.cs) ---
+
+    public void OtorgarNuevaArmaDEBUG()
+    {
+        if (armasDisponiblesDEBUG != null && armasDisponiblesDEBUG.Count > 0)
+        {
+            // Seleccionar el siguiente prefab de la lista
+            GameObject weaponPrefab = armasDisponiblesDEBUG[armaIndexDEBUG];
+            
+            // Usar tu función existente para añadir/mejorar el arma
+            AplicarMejora(weaponPrefab); 
+
+            // Avanzar al siguiente índice (circular)
+            armaIndexDEBUG = (armaIndexDEBUG + 1) % armasDisponiblesDEBUG.Count;
+            Debug.Log($"DEBUG: Intentando otorgar/mejorar arma {weaponPrefab.name}.");
+        }
+        else
+        {
+            Debug.LogWarning("DEBUG: La lista de armas disponibles está vacía.");
+        }
+    }
+
+    public void SubirNivelArmaExistenteDEBUG()
+    {
+        if (armasEquipadas.Count > 0)
+        {
+            // 1. Seleccionar un arma aleatoria de las que ya tienes
+            int index = Random.Range(0, armasEquipadas.Count);
+            ArmaBase armaAsubir = armasEquipadas[index];
+            
+            // 2. Llamar al método SubirNivel() del arma
+            if (armaAsubir != null) 
+            {
+                armaAsubir.SubirNivel();
+                Debug.Log($"DEBUG: Arma '{armaAsubir.nombreArma}' subida a Nivel {armaAsubir.nivelActual}!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("DEBUG: No hay armas equipadas para subir de nivel.");
+        }
+    }
+    
+    // --- EL RESTO DE TUS FUNCIONES ORIGINALES ---
 
     public void GanarExperiencia(int cantidad)
     {
@@ -85,9 +142,6 @@ public class PlayerStats : MonoBehaviour
         ActualizarUI_Experiencia();
 
         Debug.Log($"¡NIVEL {nivel} ALCANZADO!");
-
-
-        // Ahora avisamos al Manager de Cartas para que elijas tú.
         
         if (LevelUpManager.instancia != null) 
         {
@@ -99,10 +153,8 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    //  ESTA ES LA FUNCIÓN QUE USAN LAS CARTAS AL ELEGIR
     public void AplicarMejora(GameObject prefabRecompensa)
     {
-        // Extraemos el script del prefab para ver cómo se llama el arma
         ArmaBase scriptDelPrefab = prefabRecompensa.GetComponent<ArmaBase>();
 
         if (scriptDelPrefab == null) 
@@ -111,13 +163,9 @@ public class PlayerStats : MonoBehaviour
             return;
         }
 
-        // Buscamos si ya tienes esa arma equipada
-        // Usamos una búsqueda por NOMBRE para permitir armas distintas con mismo script
         ArmaBase armaYaInstalada = null;
-
         foreach (ArmaBase arma in armasEquipadas)
         {
-            // Comparamos el STRING del nombre
             if (arma.nombreArma == scriptDelPrefab.nombreArma)
             {
                 armaYaInstalada = arma;
@@ -125,26 +173,20 @@ public class PlayerStats : MonoBehaviour
             }
         }
 
-        // Ahora actuamos según si el arma ya la tiene o no
         if (armaYaInstalada != null)
         {
-            // ya la tiene subida de nivel
             Debug.Log($"Mejorando arma existente: {armaYaInstalada.nombreArma}");
             armaYaInstalada.SubirNivel();
         }
         else
         {
-            // No la tiene, se la damos nueva
             Debug.Log($"Nueva arma equipada: {scriptDelPrefab.nombreArma}");
             
-            // Instanciar (Crear la caja)
             GameObject nuevaArmaObj = Instantiate(prefabRecompensa, transform.position, Quaternion.identity);
             
-            // Hacerla hija del Player y resetear posición
             nuevaArmaObj.transform.SetParent(transform);
             nuevaArmaObj.transform.localPosition = Vector3.zero;
 
-            // Añadir a la lista para la próxima vez
             ArmaBase scriptNueva = nuevaArmaObj.GetComponent<ArmaBase>();
             if(scriptNueva != null) 
             {

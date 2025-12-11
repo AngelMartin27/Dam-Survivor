@@ -112,6 +112,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debug",
+            "id": "1e94635e-32dc-488d-a726-8286a7a2cd4d",
+            "actions": [
+                {
+                    "name": "AnadirArma",
+                    "type": "Button",
+                    "id": "a9dd36a5-a30d-4fe8-b368-6a148fe88ebf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SubirNivel",
+                    "type": "Button",
+                    "id": "b55c4238-3563-40d3-8590-95c256cd5edc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8ff4e389-5161-474d-b0ee-6ae6b88ae610",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SubirNivel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01264b02-c269-41cc-bca5-538cbd8c3774",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnadirArma",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
