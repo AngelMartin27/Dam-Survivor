@@ -1,49 +1,81 @@
 using UnityEngine;
+using System.Collections;
 
 public class Hacha : MonoBehaviour
 {
     [Header("Datos del Hacha Proyectil")]
-    public float speed = 10f; 	    // Velocidad de movimiento
-    public float tiempoVida = 5f; 	// Tiempo de vida máximo
-    public int damage = 25; 	    // Daño base
+    public float speed = 15f;            
+    public float tiempoIda = 1.0f;     
+    public int damage = 25;            
 
-    public void ConfigurarArma(int danioPorNivel)
+
+    private Transform player;
+    private Rigidbody rb; // Referencia para configurarlo
+
+    public void ConfigurarArma(int danioPorNivel, Transform playerTransform)
     {
-        damage = danioPorNivel; // Actualizamos el daño
+        damage = danioPorNivel;
     }
 
     void Start()
     {
-        // Se autodestruye después de 'tiempoVida' si no golpea nada.
-        Destroy(gameObject, tiempoVida); 
-    }
-    
-    void Update()
-    {
-        // 1. Movimiento hacia adelante
-        // Mover el objeto en su propia dirección frontal (transform.forward)
-        transform.position += transform.forward * speed * Time.deltaTime; 
-    }
+        ConfigurarFisicas();
 
-    private void OnTriggerEnter(Collider other) 
-    {
-        // 1. Ignorar al jugador (opcional, pero buena práctica)
-        if (other.CompareTag("Player"))
+        // Buscamos al Player si no lo tenemos ya
+        if (player == null)
         {
-            return;
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null) player = playerObj.transform;
         }
 
-        // 2. Impacto en enemigo
+        if (player != null)
+        {
+            // Orientamos el bumerán igual que el jugador
+            transform.rotation = player.rotation;
+
+            // Posicionamos un poco delante para no chocarnos con nosotros mismos
+            transform.position = player.position + transform.forward + (Vector3.up * 1.0f);
+
+            StartCoroutine(RutinaVuelo());
+        }
+        else
+        {
+            Destroy(gameObject); // Si no hay jugador, el bumerán no tiene sentido
+        }
+    }
+    private void ConfigurarFisicas()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    IEnumerator RutinaVuelo()
+    {
+        float timer = 0f;
+
+        // --- FASE 1: IDA (Sale disparado recto) ---
+        while (timer < tiempoIda)
+        {
+            // Movemos hacia adelante
+            transform.position += transform.forward * (speed * Time.deltaTime);
+
+            timer += Time.deltaTime;
+            yield return null; 
+        }
+        // --- LLEGADA ---
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Ignoramos al jugador y otros bumeranes
+        if (other.CompareTag("Player")) return;
+
         if (other.CompareTag("Enemy"))
         {
             EnemyControler enemy = other.GetComponent<EnemyControler>();
             if (enemy != null)
             {
                 enemy.Recibirdano(damage);
-                
-                // IMPORTANTE: Destruir el proyectil después de golpear al enemigo para evitar daño repetido.
-                Destroy(gameObject); 
-                return; // Salir después de destruir.
             }
         }
     }

@@ -20,16 +20,17 @@ public class Lanzadordearma : ArmaBase
     [SerializeField] private float tiempoEntreDisparosActual;
     [SerializeField] private int danoActual;
     private bool disparando = true;
+    
 
     private void Start()
     {
-        // Nombre por defecto si se te olvidó ponerlo
+        // Nombre por defecto si no se ha puesto ninguno
         if(string.IsNullOrEmpty(nombreArma)) nombreArma = "Arma Lanzadora"; 
         
         // Calcular stats del Nivel 1
         ActualizarStats();
 
-        // Arrancar la ametralladora
+        // Iniciar disparo automático
         StartCoroutine(RutinaDisparo());
     }
 
@@ -88,7 +89,7 @@ public class Lanzadordearma : ArmaBase
             {
                 // El bumerán pide (Daño, TransformJugador)
                 scriptBumeran.ConfigurarArma(danoActual, transform);
-                return; // Ya terminamos
+                return;
             }
 
             // Configurar el arma según su tipo (hacha)
@@ -96,8 +97,8 @@ public class Lanzadordearma : ArmaBase
             if (scriptHacha != null)
             {
                 // El hacha solo pide (Daño)
-                scriptHacha.ConfigurarArma(danoActual);
-                return; // Ya terminamos
+                scriptHacha.ConfigurarArma(danoActual, transform);
+                return; 
             }
             Debug.LogError("No se ha configurado el arma: " + armaPrefab.name);
         }

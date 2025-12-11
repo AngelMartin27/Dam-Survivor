@@ -4536,7 +4536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3466313830933950354, guid: 41c97ce46b19e49439f874dc187d0507, type: 3}
       propertyPath: armasDisponiblesDEBUG.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3466313830933950354, guid: 41c97ce46b19e49439f874dc187d0507, type: 3}
       propertyPath: 'armasDisponiblesDEBUG.Array.data[0]'
@@ -4554,6 +4554,10 @@ PrefabInstance:
       propertyPath: 'armasDisponiblesDEBUG.Array.data[3]'
       value: 
       objectReference: {fileID: 7393488215851058461, guid: 0768fba317df8d94f992725da3e1528f, type: 3}
+    - target: {fileID: 3466313830933950354, guid: 41c97ce46b19e49439f874dc187d0507, type: 3}
+      propertyPath: 'armasDisponiblesDEBUG.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1974109954405935646, guid: 6af7c2b2782749246895e6de1bd7ff8a, type: 3}
     - target: {fileID: 4577489535501772010, guid: 41c97ce46b19e49439f874dc187d0507, type: 3}
       propertyPath: m_LocalPosition.x
       value: 228.2
